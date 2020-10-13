@@ -11,8 +11,10 @@ class NewVisitorTest(StaticLiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
+        
 
     def tearDown(self):
+        self.browser.refresh()
         self.browser.quit()
 
 
