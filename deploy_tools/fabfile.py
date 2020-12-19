@@ -1,12 +1,19 @@
 import random
+import os
 from fabric.contrib.files import append, exists
-from fabric.api import cd, env, local, run
+from fabric.api import cd, env, local, run,task
+#from fabric import task, Connection
+from fabric import *
 
+env.user="root"
+env.password = "1236985"
+env.key_filename=["C:/Users/Omar-Ultimate/dropletpuplic.pem"]
+env.hosts=["staging.omegafoum.com"]
 REPO_URL = 'https://github.com/OMAR-EHAB777/todoapp.git'
-
-
+def host_type():
+    run('uname -s')
 def deploy():
-    site_folder = f'/{env.user}/{env.host}'
+    site_folder = f'/{env.user}/{env.host}'  
     run(f'mkdir -p {site_folder}')
     with cd(site_folder):
         _get_latest_source()
