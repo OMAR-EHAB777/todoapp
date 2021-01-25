@@ -1,26 +1,37 @@
 import random
-import os
+import paramiko, os
+paramiko.common.logging.basicConfig(level=paramiko.common.DEBUG) 
 from fabric.contrib.files import append, exists
-from fabric.api import cd, env, local, run,task
-#from fabric import task, Connection
+from fabric.api import cd, env, local, run,task,settings
+from fabric.context_managers import cd
 from fabric import *
 
 env.user="root"
 env.password = "1236985"
-env.key_filename=["C:/Users/Omar-Ultimate/dropletpuplic.pem"]
-env.hosts=["staging.omegafoum.com"]
+env.key_filename=[r"C:/Users/dropletpuplic.pem"]
+env.hosts=["165.232.110.163:22"]
+env.port=22
+env.use_ssh_config = True
 REPO_URL = 'https://github.com/OMAR-EHAB777/todoapp.git'
-def host_type():
-    run('uname -s')
+
+    
+def list_files():
+        with cd('/root/stagetodoapp'):
+            run('ls')
+def site_folder():  
+    code_dir ='/env.user/'
+    with cd (code_dir):
+        run('ls')      
 def deploy():
-    site_folder = f'/{env.user}/{env.host}'  
-    run(f'mkdir -p {site_folder}')
+    site_folder = '/root/stagetodoapp' 
     with cd(site_folder):
-        _get_latest_source()
-        _update_virtualenv()
-        _create_or_update_dotenv()
-        _update_static_files()
-        _update_database()
+      run('mkdir -p {site_folder}')
+      with cd(site_folder):
+         _get_latest_source()
+         _update_virtualenv()
+         _create_or_update_dotenv()
+         _update_static_files()
+         _update_database()
 
 
 def _get_latest_source():
